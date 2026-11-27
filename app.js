@@ -101,7 +101,7 @@ async function feedView(){
   loadFeed();
 }
 async function loadFeed(){
-  let q=sb.from('posts').select('*,author:profiles(id,full_name,verified,title,title_color),comments(count)').order('created_at',{ascending:false}).limit(60);
+  let q=sb.from('posts').select('*,author:profiles!posts_user_id_fkey(id,full_name,verified,title,title_color),comments(count)').order('created_at',{ascending:false}).limit(60);
   if(feedState.kind!=='all')q=q.eq('kind',feedState.kind);
   if(feedState.subject.trim())q=q.ilike('subject','%'+feedState.subject.trim().replace(/[%,]/g,'')+'%');
   const s=feedState.q.trim().replace(/[%,()]/g,'');
@@ -148,8 +148,8 @@ function newView(kind){
 async function postView(id){
   shell('<div class="empty">جاري التحميل...</div>');
   const [{data:p},{data:cs},{count:vc},{data:mv}]=await Promise.all([
-    sb.from('posts').select('*,author:profiles(id,full_name,verified,title,title_color)').eq('id',id).single(),
-    sb.from('comments').select('*,author:profiles(id,full_name,verified,title,title_color)').eq('post_id',id).order('created_at'),
+    sb.from('posts').select('*,author:profiles!posts_user_id_fkey(id,full_name,verified,title,title_color)').eq('id',id).single(),
+    sb.from('comments').select('*,author:profiles!comments_user_id_fkey(id,full_name,verified,title,title_color)').eq('post_id',id).order('created_at'),
     sb.from('votes').select('*',{count:'exact',head:true}).eq('post_id',id),
     sb.from('votes').select('post_id').eq('post_id',id).eq('user_id',me.id)]);
   if(!p)return shell('<div class="empty">المنشور غير موجود</div>');
