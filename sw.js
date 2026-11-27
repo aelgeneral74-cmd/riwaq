@@ -1,5 +1,5 @@
 const CACHE='riwaq-v1';
-const ASSETS=['./','index.html','style.css','app.js','convert.js','config.js','icon-192.png'];
+const ASSETS=['./','index.html','style.css','app.js','convert.js','config.js','icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).catch(()=>{}));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))));self.clients.claim()});
 self.addEventListener('fetch',e=>{
@@ -10,7 +10,7 @@ self.addEventListener('fetch',e=>{
 self.addEventListener('push',e=>{
   let d={title:'رواق',body:'يوجد جديد في المجتمع'};
   try{d=e.data.json()}catch(_){}
-  e.waitUntil(self.registration.showNotification(d.title,{body:d.body,icon:'icon-192.png',badge:'icon-192.png',dir:'rtl',lang:'ar',data:{post:d.post_id}}));
+  e.waitUntil(self.registration.showNotification(d.title,{body:d.body,icon:'icon.svg',badge:'icon.svg',dir:'rtl',lang:'ar',data:{post:d.post_id}}));
 });
 self.addEventListener('notificationclick',e=>{
   e.notification.close();
