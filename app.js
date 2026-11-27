@@ -108,7 +108,7 @@ async function loadFeed(){
   if(s)q=q.or(`title.ilike.%${s}%,body.ilike.%${s}%`);
   const {data,error}=await q;
   const el=$('#list');if(!el)return;
-  if(error)return el.innerHTML='<div class="empty">تعذر التحميل</div>';
+  if(error)return el.innerHTML='<div class="empty">تعذر التحميل: '+esc(error.message)+'</div>';
   if(!data.length)return el.innerHTML='<div class="empty">لا يوجد منشورات بعد. كن أول من ينشر.</div>';
   el.innerHTML=data.map(p=>{const [kt,kc]=KIND[p.kind];return `<a href="#/post/${p.id}" style="color:inherit"><div class="card">
    <div class="meta"><span class="chip ${kc}">${kt}</span>${p.subject?`<span class="chip">${esc(p.subject)}</span>`:''}${p.solved?'<span class="chip s">تم الحل</span>':''}</div>
